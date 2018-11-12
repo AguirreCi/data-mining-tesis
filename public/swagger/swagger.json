@@ -1,0 +1,145 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentación referida a la API de minería de datos que clasifica urls en potencial phishing o inofensiva.",
+    "version": "1.0.0",
+    "title": "API Minería de datos. Clasificación de URLS"
+  },
+  "host": "data-mining-tesis.herokuapp.com/",
+  "tags": [
+    {
+      "name": "DETECCIÓN DE PHISHING",
+      "description": "Recibe URLS y las clasifica en base a dos modelos: Naive Bayes, Árbol de Decisión",
+      "externalDocs": {
+        "description": "Como utilizar Swagger",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "obtener_datos",
+      "description": "Recupera los atributos necesarios de una nueva URL."
+    },
+    {
+      "name": "analizar_url",
+      "description": "Analiza una URL en base a los modelos Naive Bayes y Árbol de Decisión."
+    },
+    {
+      "name": "analisis_virusTotal",
+      "description": "Recupera reportes de VirusTotal para una URL."
+    }
+  ],
+  "schemes": ["https", "http"],
+  "paths": {
+    "api/obtener_datos/{url}": {
+      "get": {
+        "tags": ["obtener_datos"],
+        "summary": "Recibe una url y obtiene sus atributos.",
+        "description": "La url debe esta codificada en base64, esta request devuelve un id",
+        "operationId": "obtener_datos",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "description": "URL codificada en base64",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta ejemplo:  {id : 3}   ",
+            "schema": {
+              "$ref": "#/definitions/nueva_url"
+            }
+          },
+          "400": { "description": "Invalid status value" }
+        }
+      }
+    },
+    "api/analizar_url/{id}": {
+      "get": {
+        "tags": ["analizar_url"],
+        "summary": "Analiza una URL en base a los modelos Naive Bayes y Árbol de Decisión.",
+        "description": "Utiliza el id devuelto por obtener_datos",
+        "operationId": "analizar_url",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id devuelto por obtener_datos",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta ejemplo:  {tree : 0, naive : 1}    0=Phishing, 1=Inofensiva   ",
+            "schema": {
+              "$ref": "#/definitions/analisis_mineria"
+            }
+          },
+          "400": { "description": "Invalid status value" }
+        }
+      }
+    },
+    "api/analisis_virusTotal/{id}": {
+      "get": {
+        "tags": ["analisis_virusTotal"],
+        "summary": "Recupera reportes de VirusTotal para una URL.",
+        "description": "Utiliza el id devuelto por obtener_datos",
+        "operationId": "analisis_virusTotal",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id devuelto por obtener_datos",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuesta ejemplo:  Hay 5 informes positivos de phishing. ",
+            "schema": {
+              "$ref": "#/definitions/analisis_virustotal"
+            }
+          },
+          "400": { "description": "Invalid status value" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "nueva_url": {
+      "type": "array",
+      "properties": {
+        "id": { "type": "integer", "format": "int64" }
+      },
+      "xml": { "name": "nueva_url" }
+    },
+    "analisis_mineria": {
+      "type": "array",
+      "properties": {
+        "tree": { "type": "integer", "format": "int64" },
+        "naive": { "type": "integer", "format": "int64" }
+      },
+      "xml": { "name": "analisis_mineria" }
+    },
+    "analisis_virustotal": {
+      "type": "array",
+      "properties": {
+        "resultado": { "type": "string" }
+      },
+      "xml": { "name": "analisis_virustotal" }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
