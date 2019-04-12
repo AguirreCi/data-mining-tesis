@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 use App\Url;
 
-class UrlController extends Controller
+class urlController extends Controller
 {
     public function obtener_datos($url_get){
 
