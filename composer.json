@@ -9,14 +9,14 @@
   "type": "project",
   "require": {
     "php": "^7.1.3",
+    "darkaonline/l5-swagger": "5.7.*",
     "fideloper/proxy": "^4.0",
     "laravel/framework": "5.6.38",
     "laravel/tinker": "^1.0",
     "mallardduck/whois-client": "^0.4.0",
     "phois/whois": "dev-master",
-    "php-ai/php-ml": "^0.8.0",
-    "zircote/swagger-php": "^2.0",
-    "darkaonline/l5-swagger": "5.7.*"
+    "php-ai/php-ml": "^0.9.0",
+    "zircote/swagger-php": "^2.0"
   },
   "require-dev": {
     "filp/whoops": "^2.0",

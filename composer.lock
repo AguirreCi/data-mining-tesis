@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5f6fa00d4e60fa41e8802d093a4d562",
+    "content-hash": "e9172fcd077406aae49d764df29e3a9d",
     "packages": [
         {
             "name": "darkaonline/l5-swagger",
@@ -909,6 +909,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -955,6 +956,7 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
@@ -1768,12 +1770,12 @@
             "version": "0.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mallardduck/whois-client.git",
+                "url": "https://github.com/mallardduck/php-whois-client.git",
                 "reference": "d929a44f6b7b4003a762a8961e856345a9ec1840"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mallardduck/whois-client/zipball/d929a44f6b7b4003a762a8961e856345a9ec1840",
+                "url": "https://api.github.com/repos/mallardduck/php-whois-client/zipball/d929a44f6b7b4003a762a8961e856345a9ec1840",
                 "reference": "d929a44f6b7b4003a762a8961e856345a9ec1840",
                 "shasum": ""
             },
@@ -2097,29 +2099,28 @@
         },
         {
             "name": "php-ai/php-ml",
-            "version": "0.8.0",
+            "version": "0.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-ai/php-ml.git",
-                "reference": "5e02b893e904761cd7e2415b11778cd421494c07"
+                "url": "https://gitlab.com/php-ai/php-ml.git",
+                "reference": "fd8b70629e16ed67307fe150ba25738449b9a6b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-ai/php-ml/zipball/5e02b893e904761cd7e2415b11778cd421494c07",
-                "reference": "5e02b893e904761cd7e2415b11778cd421494c07",
+                "url": "https://gitlab.com/api/v4/projects/php-ai%2Fphp-ml/repository/archive.zip?sha=fd8b70629e16ed67307fe150ba25738449b9a6b2",
+                "reference": "fd8b70629e16ed67307fe150ba25738449b9a6b2",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "php": "^7.2"
             },
             "require-dev": {
-                "phpbench/phpbench": "^0.14.0",
-                "phpstan/phpstan-phpunit": "^0.10",
-                "phpstan/phpstan-shim": "^0.10",
-                "phpstan/phpstan-strict-rules": "^0.10",
-                "phpunit/phpunit": "^7.0.0",
-                "symplify/coding-standard": "^5.1",
-                "symplify/easy-coding-standard": "^5.1"
+                "phpbench/phpbench": "^0.16.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpstan/phpstan-strict-rules": "^0.12",
+                "phpunit/phpunit": "^8.0",
+                "symplify/easy-coding-standard": "^6.0"
             },
             "type": "library",
             "autoload": {
@@ -2148,7 +2149,7 @@
                 "machine learning",
                 "pattern recognition"
             ],
-            "time": "2019-03-20T22:22:45+00:00"
+            "time": "2020-05-27T09:52:59+00:00"
         },
         {
             "name": "psr/container",
