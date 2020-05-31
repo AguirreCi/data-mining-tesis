@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Phpml\Classification\NaiveBayes;
-use Phpml\Classification\DecisionTree;
+use Phpml\Classification\SVC;
+use Phpml\SupportVectorMachine\Kernel;
+use Phpml\Classification\KNearestNeighbors;
+use Phpml\Math\Distance\Minkowski;
 
 
 use Phpml\Metric\Accuracy;
@@ -84,8 +87,6 @@ class mineriaController extends Controller
 
     }
 
-    
-
     public function naivebayes_proc(){
 
     	//ARMO LOS SAMPLES
@@ -110,10 +111,9 @@ class mineriaController extends Controller
 		
 		return "Listo naive";
 
-    }
-
-
-        public function tree_proc(){
+	}
+	
+	public function svm_proc(){
 
     	//ARMO LOS SAMPLES
 
@@ -125,22 +125,47 @@ class mineriaController extends Controller
     	$samples_pru = json_decode(file_get_contents('test_data.txt'));
     	$labels_pru = json_decode(file_get_contents('test_labels.txt'));
 
-		$classifier = new DecisionTree();
+		$classifier = new SVC(Kernel::RBF, $cost = 1000);
 		$classifier->train($samples, $labels);
 
 		$modelManager = new ModelManager();
-		$modelManager->saveToFile($classifier, 'modelos/tree.txt');
+		$modelManager->saveToFile($classifier, 'modelos/svm.txt');
 
 		$result = $classifier->predict($samples_pru);
 
-		file_put_contents('decisiontree_data.txt', json_encode($result));
+		file_put_contents('svm_data.txt', json_encode($result));
 		
-		return "Listo tree";
+		return "Listo svm";
+
+    }
+		
+	public function k_proc(){
+		set_time_limit ( 15000 );
+    	//ARMO LOS SAMPLES
+
+    	//ENTRENAMIENTO
+    	$samples = json_decode(file_get_contents('prueba_data.txt'));
+    	$labels = json_decode(file_get_contents('prueba_labels.txt'));
+
+    	//PRUEBA
+    	$samples_pru = json_decode(file_get_contents('test_data.txt'));
+    	$labels_pru = json_decode(file_get_contents('test_labels.txt'));
+
+		$classifier = new KNearestNeighbors($k=3, new Minkowski($lambda=4));
+		$classifier->train($samples, $labels);
+
+		$modelManager = new ModelManager();
+		$modelManager->saveToFile($classifier, 'modelos/kn.txt');
+
+		$result = $classifier->predict($samples_pru);
+
+		file_put_contents('kn_data.txt', json_encode($result));
+		
+		return "Listo kn";
 
     }
 
-
-        public function accuracy_tree(){
+	public function accuracy_svm(){
 
     	//ARMO LOS SAMPLES
 
@@ -148,7 +173,7 @@ class mineriaController extends Controller
     	$labels = json_decode(file_get_contents('test_labels.txt'));
 
     	//PREDICCION
-    	$result = json_decode(file_get_contents('decisiontree_data.txt'));
+    	$result = json_decode(file_get_contents('svm_data.txt'));
 
 		$nivel_accuracy = Accuracy::score($labels, $result);
 		
@@ -164,14 +189,45 @@ class mineriaController extends Controller
 
 		$cantidad = $report->getSupport();
 
-		$resultados = ['modelo'=>'Árbol de Decisión', 'precision'=>$nivel_accuracy,'matriz'=>$confusionMatrix,'sensibilidad'=>$sensibilidad, 'precision_pred'=>$precision_pred, 'f1'=>$f1, 'cant'=>$cantidad];
+		$resultados = ['modelo'=>'SVM', 'precision'=>$nivel_accuracy,'matriz'=>$confusionMatrix,'sensibilidad'=>$sensibilidad, 'precision_pred'=>$precision_pred, 'f1'=>$f1, 'cant'=>$cantidad];
+
+		
+		return view('resultados')->with('resultados',$resultados);
+
+    }
+	
+	public function accuracy_kn(){
+
+    	//ARMO LOS SAMPLES
+
+    	//REAL
+    	$labels = json_decode(file_get_contents('test_labels.txt'));
+
+    	//PREDICCION
+    	$result = json_decode(file_get_contents('kn_data.txt'));
+
+		$nivel_accuracy = Accuracy::score($labels, $result);
+		
+		$confusionMatrix = ConfusionMatrix::compute($labels, $result);
+
+		$report = new ClassificationReport($labels, $result);
+		
+		$precision_pred = $report->getPrecision();
+
+		$sensibilidad = $report->getRecall();
+
+		$f1 = $report->getF1score();
+
+		$cantidad = $report->getSupport();
+
+		$resultados = ['modelo'=>'K Nearest Neighbors', 'precision'=>$nivel_accuracy,'matriz'=>$confusionMatrix,'sensibilidad'=>$sensibilidad, 'precision_pred'=>$precision_pred, 'f1'=>$f1, 'cant'=>$cantidad];
 
 		
 		return view('resultados')->with('resultados',$resultados);
 
     }
 
-        public function accuracy_naive(){
+    public function accuracy_naive(){
 
     	//ARMO LOS SAMPLES
 
@@ -200,29 +256,4 @@ class mineriaController extends Controller
 		return view('resultados')->with('resultados',$resultados);
 
     }    
-
-    public function obtener_arbol(){
-
-    	$columnas = ['cant_metatags','tiene_whois','tiene_https','dias_desde_reg','largo_titulo','cant_digitos','largo_url','ranking','cant_subdominios','cant_guiones'];
-
-		$modelManager = new ModelManager();
-
-		$treeClassifier = new DecisionTree();
-
-		$treeClassifier = $modelManager->restoreFromFile('modelos/tree.txt');
-
-		$treeClassifier->setColumnNames($columnas);
-
-		$arbol = $treeClassifier->getHTML();
-		
-		file_put_contents('arbol.txt',$arbol);
-
-		
-		
-		return "listo";
-
-    }
-
-
-    
 }

@@ -23,23 +23,20 @@ class urlController extends Controller
 
         }else{
 
-        $id = $this->insertar_url($url);
-
-
-			$this->obtener_tags($id);
-			$this->obtener_whois($id);
-			$this->subdominios($id);
-			$this->analizar_longitud($id);
-			$this->guiones($id);
-			$this->ranking($id);
-			$this->ssl($id);
-			$this->dias_desde_reg($id);
-
+            $id = $this->insertar_url($url);
+            $this->obtener_tags($id);
+            $this->obtener_whois($id);
+            $this->subdominios($id);
+            $this->analizar_longitud($id);
+            $this->guiones($id);
+            $this->ranking($id);
+            $this->ssl($id);
+            $this->dias_desde_reg($id);
         }
 
-			$respuesta = ['id'=>$id];
+		$respuesta = ['id'=>$id];
 
-			return json_encode($respuesta);
+		return json_encode($respuesta);
 	}
 
 	public function insertar_url($url){
@@ -170,8 +167,6 @@ class urlController extends Controller
             $fecha = substr($fecha,0, (strpos($fecha, "T")!==null)?strpos($fecha,'T'):strlen($fecha));
             $fecha = substr($fecha,0, (strpos($fecha,'(')!==null)?strpos($fecha,'('):strlen($fecha));
             $tiene = 1;
-        }elseif (condition) {
-            # code...
         }
 
 

@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 
 
 use Phpml\Classification\NaiveBayes;
-use Phpml\Classification\DecisionTree;
+use Phpml\Classification\SVC;
+use Phpml\Classification\KNearestNeighbors;
 use Phpml\ModelManager;
 
 
@@ -22,20 +23,20 @@ class analisisController extends Controller
 	public function analizar_url($id){
 		$res_naive = $this->analisis_naive($id);
 
-		$res_tree = $this->analisis_tree($id);
+		$res_knn = $this->analisis_knn($id);
+		
+		$res_svc = $this->analisis_svc($id);
 
-
-		$rta = ['tree'=>$res_tree, 'naive'=>$res_naive];
+		
+		$rta = ['knn'=>$res_knn, 'naive'=>$res_naive, 'svc'=>$res_svc];
 
 		return json_encode($rta);
 
 	}
 
     public function analisis_naive($id){
-    	$naiveClassifier = new NaiveBayes();
 
-
-    	$modelManager = new ModelManager();
+		$modelManager = new ModelManager();
 		$naiveClassifier = $modelManager->restoreFromFile('modelos/naive.txt');
 
 		$url = Url::find($id);
@@ -47,18 +48,30 @@ class analisisController extends Controller
 		return $result;
     }
 
-	public function analisis_tree($id){
-    	$naiveClassifier = new DecisionTree();
+	public function analisis_knn($id){
 
-
-    	$modelManager = new ModelManager();
-		$treeClassifier = $modelManager->restoreFromFile('modelos/tree.txt');
+		$modelManager = new ModelManager();
+		$knnClassifier = $modelManager->restoreFromFile('modelos/kn.txt');
 
 		$url = Url::find($id);
 
 		$item = [intval($url->tags),intval($url->whois),intval($url->https),intval($url->dias_reg),intval($url->largo_titulo),intval($url->numeros),intval($url->largo),intval($url->rank),intval($url->subdominios),intval($url->guiones)];
 
-		$result = $treeClassifier->predict($item);
+		$result = $knnClassifier->predict($item);
+
+		return $result;
+	}
+	
+	public function analisis_svc($id){
+
+    	$modelManager = new ModelManager();
+		$svcClassifier = $modelManager->restoreFromFile('modelos/svm.txt');
+
+		$url = Url::find($id);
+
+		$item = [intval($url->tags),intval($url->whois),intval($url->https),intval($url->dias_reg),intval($url->largo_titulo),intval($url->numeros),intval($url->largo),intval($url->rank),intval($url->subdominios),intval($url->guiones)];
+
+		$result = $svcClassifier->predict($item);
 
 		return $result;
     }

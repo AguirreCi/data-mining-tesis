@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Proyecto de Grado</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -85,9 +85,11 @@
                 <br>
 
                 <div class="links">
+                    <a href="/app/" target="_blank" >App</a>
                     <a href="/swagger/" target="_blank" >Documentación API</a>
                     <a href="{{route('accuracy_naive')}}" target="_blank" >Resultados Naive Bayes</a>
-                    <a href=" {{route('accuracy_dt')}} " target="_blank" >Resultados Árbol de Decisión</a>
+                    <a href="{{route('accuracy_svm')}}" target="_blank" >Resultados SVM</a>
+                    <a href=" {{route('accuracy_kn')}} " target="_blank" >Resultados KNN</a>
                     <a href="https://github.com/AguirreCi/data-mining-tesis" target="_blank" >GitHub</a>
                 </div>
             </div>
